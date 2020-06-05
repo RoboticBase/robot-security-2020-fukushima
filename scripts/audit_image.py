@@ -23,7 +23,7 @@ def main():
         hashed_watermark_text = hashlib.sha224(watermark_text.encode()).hexdigest()
         print(hashed_watermark_text)
         generator = WatermarkGenerator()
-        generator.generate("/opt/ros_ws/src/ros_audit_image/images/IMG_3431.jpeg",
+        generator.generate(rospy.get_param('~')['watermark_image']['base_image_path'],
                            hashed_watermark_text)
         elapsed_time = time.time() - start
         print(str(elapsed_time) + "sec")
