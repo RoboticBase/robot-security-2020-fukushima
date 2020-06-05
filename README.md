@@ -11,6 +11,8 @@ Testing the time to generate a watermark
 roslaunch ros_audit_image ros_audit_image.launch
 ```
 
+Generate a hash including time, odometry and location info using **hashlib.sha224** algorithm
+
 ```
 root@28114219c6f6:/opt/ros_ws# roslaunch ros_audit_image ros_audit_image.launch
 
