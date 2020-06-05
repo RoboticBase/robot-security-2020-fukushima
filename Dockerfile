@@ -11,6 +11,7 @@ RUN apt-key adv --keyserver 'hkp://keyserver.ubuntu.com:80' --recv-key C1CF6E31E
 RUN apt-get update && apt-get upgrade -y && \
     apt-get install git python-pip -y && \
     pip install -U pip && \
+    pip install -r src/ros_audit_image/requirements.txt && \
     source /opt/ros/kinetic/setup.bash && \
     /opt/ros/kinetic/bin/catkin_make && \
     echo "source /opt/ros/kinetic/setup.bash" >> /root/.bashrc && \
