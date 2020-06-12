@@ -2,7 +2,8 @@ watermark_image:
   output_path: "/opt/ros_ws/src/ros_audit_image/images/watermarked/"
   base_image_path: "/opt/ros_ws/src/ros_audit_image/images/IMG_3431.jpeg"
   font_file_path: "/usr/share/fonts/truetype/dejavu/DejaVuSans.ttf"
-  font_size: 64
+  font_size: 14
+  output_width: 600
   text_opacity: 64
   quality: 95
   text_color:
