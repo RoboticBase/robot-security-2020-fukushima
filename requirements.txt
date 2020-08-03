@@ -1,3 +1,2 @@
 -i https://pypi.org/simple
-pillow==6.2.2
 pytz==2020.1
