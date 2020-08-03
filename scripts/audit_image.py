@@ -25,8 +25,8 @@ def callback(image_message):
     print(hashed_watermark_text)
     print(watermark_text)
     generator = WatermarkGenerator()
-    path = generator.generate(image_message,
-                              '{}\n{}'.format(hashed_watermark_text, watermark_text))
+    generator.generate(image_message,
+                       '{}\n{}'.format(hashed_watermark_text, watermark_text))
     elapsed_time = time.time() - start
     print("elapsed_time: " + str(elapsed_time) + "[sec]")
     print("generate finish")
