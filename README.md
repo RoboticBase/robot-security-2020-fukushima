@@ -5,6 +5,12 @@ A ros package to audit image of camera.
 
 # Usage
 
+Launch the camera node
+
+```
+roslaunch ros_audit_image libuvc_camera.launch
+```
+
 Testing the time to generate a watermark
 
 ```
