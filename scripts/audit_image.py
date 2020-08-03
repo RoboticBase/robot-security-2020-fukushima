@@ -27,6 +27,10 @@ def callback(image_message):
     generator = WatermarkGenerator()
     path = generator.generate(image_message,
                               '{}\n{}'.format(hashed_watermark_text, watermark_text))
+    elapsed_time = time.time() - start
+    print("elapsed_time: " + str(elapsed_time) + "[sec]")
+    print("generate finish")
+    print("===========================")
 
 
 def main():
@@ -34,13 +38,6 @@ def main():
         rospy.init_node(NODE_NAME)
         rospy.Subscriber('image_raw', ImageMSG, callback)
         rospy.spin()
-        # generator = WatermarkGenerator()
-        # path = generator.generate(rospy.get_param('~')['watermark_image']['base_image_path'],
-        #                           '{}\n{}'.format(hashed_watermark_text, watermark_text))
-        # print(path)
-        # elapsed_time = time.time() - start
-        # print(str(elapsed_time) + "sec")
-        # print("generate finish")
     except rospy.ROSInterruptException:
         pass
 
