@@ -27,7 +27,24 @@ root@28114219c6f6:/opt/ros_ws# roslaunch ros_audit_image ros_audit_image.launch
 
 process[audit_image-2]: started with pid [4294]
 generate start
-bc5ed4ed5a36def9895db455718f11c1835456f81a27545524197cd1
+866515a8c012dd60699b3aa49de683ca884bb328aae9c8475854ff62
+robot_01,2020-08-03 14:57:43,0.0_0.0,0.0_0.0_0.0_0.0
+elapsed_time: 0.0569100379944[sec]
+generate finish
+===========================
+generate start
+866515a8c012dd60699b3aa49de683ca884bb328aae9c8475854ff62                                                                                                                                                    robot_01,2020-08-03 14:57:43,0.0_0.0,0.0_0.0_0.0_0.0
+elapsed_time: 0.0382528305054[sec]
+generate finish
+===========================
+generate start
+866515a8c012dd60699b3aa49de683ca884bb328aae9c8475854ff62
+robot_01,2020-08-03 14:57:43,0.0_0.0,0.0_0.0_0.0_0.0
+elapsed_time: 0.105615854263[sec]
+generate finish
+===========================
+...
+
 ```
 
 ## Generated image
