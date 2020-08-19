@@ -7,21 +7,29 @@ import time
 PORT = 4
 GPIO_HIGH_TIME = 0.5
 VOICE_FILE_PATH = 'voice/speech_20200710023858074.mp3'
+ID_LIST_PATH = 'data/id_list.csv'
 
 
-class CardReader(object):
+class SecurityBox:
+    def __init__(self, id_list):
+        self.id_list = id_list
+
     def on_connect(self, tag):
         print('【 Touched 】')
         print(tag)
 
         self.idm = binascii.hexlify(tag._nfcid)
-        print("IDm : " + str(self.idm))
+        print("IDm : " + self.idm.decode())
+        if self.idm.decode() in self.id_list:
+            self.open()
+
+        return True
+
+    def open(self):
         GPIO.output(PORT, GPIO.HIGH)
         time.sleep(GPIO_HIGH_TIME)
         GPIO.output(PORT, GPIO.LOW)
         pygame.mixer.music.play()
-
-        return True
 
     def read_id(self):
         clf = nfc.ContactlessFrontend('usb')
@@ -32,7 +40,10 @@ class CardReader(object):
 
 
 if __name__ == '__main__':
-    cr = CardReader()
+    id_list = []
+    with open(ID_LIST_PATH, 'r') as f:
+        id_list = [id.strip() for id in f.readlines()]
+    security_box = SecurityBox(id_list)
     pygame.mixer.init()
     pygame.mixer.music.load(VOICE_FILE_PATH)
     GPIO.setmode(GPIO.BCM)
@@ -40,9 +51,8 @@ if __name__ == '__main__':
     while True:
         try:
             print('Please Touch')
-            cr.read_id()
+            security_box.read_id()
             print('【 Released 】')
         except KeyboardInterrupt:
-            print('test')
             GPIO.cleanup()
             break
