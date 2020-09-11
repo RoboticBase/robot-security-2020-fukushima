@@ -15,11 +15,7 @@ class SecurityBox:
         self.id_list = id_list
 
     def on_connect(self, tag):
-        print('【 Touched 】')
-        print(tag)
-
         self.idm = binascii.hexlify(tag._nfcid)
-        print("IDm : " + self.idm.decode())
         if self.idm.decode() in self.id_list:
             self.open()
 
@@ -39,7 +35,7 @@ class SecurityBox:
             clf.close()
 
 
-if __name__ == '__main__':
+def main():
     id_list = []
     with open(ID_LIST_PATH, 'r') as f:
         id_list = [id.strip() for id in f.readlines()]
@@ -50,9 +46,11 @@ if __name__ == '__main__':
     GPIO.setup(PORT, GPIO.OUT)
     while True:
         try:
-            print('Please Touch')
             security_box.read_id()
-            print('【 Released 】')
         except KeyboardInterrupt:
             GPIO.cleanup()
             break
+
+
+if __name__ == '__main__':
+    main()
