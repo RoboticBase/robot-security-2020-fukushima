@@ -13,8 +13,10 @@
   <arg name="NAVI_CMD_NAME" default="$(optenv NAVI_CMD_NAME navi_cmd)"/>
   <arg name="SEND_DELTA_MILLISEC" default="1000"/>
   <arg name="SLOP_MILLISEC" default="500"/>
+  <arg name="MISSION_WAIT_MILLSEC" default="200"/>
+  <arg name="WAYPOINT_WAIT_MILLSEC" default="1000"/>
 
-  <!-- <node name="eams_consumer" pkg="converter" type="eams_consumer.py" output="screen">
+  <node name="eams_consumer" pkg="converter" type="eams_consumer.py" output="screen">
     <rosparam command="delete" param=""/>
     <param name="amqp/host" value="$(arg AMQP_HOST)"/>
     <param name="amqp/port" value="$(arg AMQP_PORT)"/>
@@ -25,8 +27,12 @@
     <param name="rb/entity_type" value="$(arg ENTITY_TYPE)"/>
     <param name="rb/entity_id" value="$(arg ENTITY_ID)"/>
     <param name="rb/navi_cmd_name" value="$(arg NAVI_CMD_NAME)"/>
-    <param name="topic/navi_cmd" value="/navi_cmd"/>
-  </node> -->
+    <param name="topic/control_cmd" value="/command/control"/>
+    <param name="topic/mission_cmd" value="/command/mission"/>
+    <param name="topic/navi_cmdexe" value="/navi_cmdexe"/>
+    <param name="thresholds/mission_wait_ms" value="$(arg MISSION_WAIT_MILLSEC)"/>
+    <param name="thresholds/waypoint_wait_ms" value="$(arg WAYPOINT_WAIT_MILLSEC)"/>
+  </node>
 
   <node name="eams_producer" pkg="converter" type="eams_producer.py" output="screen">
     <rosparam command="delete" param=""/>

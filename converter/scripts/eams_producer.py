@@ -5,7 +5,7 @@ from datetime import datetime, timedelta, timezone
 from threading import Lock
 
 import rospy
-from std_msgs.msg import Float64
+from std_msgs.msg import Float64, String
 from sensor_msgs.msg import NavSatFix, BatteryState
 from eams_msgs.msg import State
 
@@ -37,7 +37,7 @@ class RobotState:
                         'altitude': position.altitude,
                     },
                     'angle': {
-                        'compass': compass.data,
+                        'yaw': compass.data,
                     },
                 },
                 'covariance': list(position.position_covariance),
@@ -66,7 +66,7 @@ class MissionState:
             'attrs': message,
         }))
 
-"""
+
 class NaviResult:
     def __init__(self, producer):
         self._params = wrap_namespace(rospy.get_param('~'))
@@ -74,68 +74,7 @@ class NaviResult:
 
     def navi_result_cb(self, result):
         rospy.loginfo('subscribe a navi result, %s', result)
-        message = {}
-        message[self._params.rb.navi_cmd_name] = {
-            'time': result.time,
-            'received_time': result.received_time,
-            'received_cmd': result.received_cmd,
-            'received_destination': {
-                'point': {
-                    'x': result.received_destination.point.x,
-                    'y': result.received_destination.point.y,
-                    'z': result.received_destination.point.z,
-                },
-                'angle': {
-                    'roll': result.received_destination.angle_optional.angle.roll,
-                    'pitch': result.received_destination.angle_optional.angle.pitch,
-                    'yaw': result.received_destination.angle_optional.angle.yaw,
-                } if result.received_destination.angle_optional.valid else None,
-            },
-            'received_costmap': {
-                'resolution': result.received_costmap.resolution,
-                'width': result.received_costmap.width,
-                'height': result.received_costmap.height,
-                'origin': {
-                    'point': {
-                        'x': result.received_costmap.origin.point.x,
-                        'y': result.received_costmap.origin.point.y,
-                        'z': result.received_costmap.origin.point.z,
-                    },
-                    'angle': {
-                        'roll': result.received_costmap.origin.angle.roll,
-                        'pitch': result.received_costmap.origin.angle.pitch,
-                        'yaw': result.received_costmap.origin.angle.yaw,
-                    },
-                },
-                'cost_value': list(result.received_costmap.cost_value),
-            },
-            'result': result.result,
-            'errors': [err for err in result.errors if isinstance(err, str) and len(err) > 0],
-        }
-        self._producer.send(json.dumps({
-            'cmdexe': message
-        }))
-
-
-class EmgResult:
-    def __init__(self, producer):
-        self._params = wrap_namespace(rospy.get_param('~'))
-        self._producer = producer
-
-    def emg_result_cb(self, result):
-        rospy.loginfo('subscribe a emg result, %s', result)
-        message = {}
-        message[self._params.rb.emg_cmd_name] = {
-            'time': result.time,
-            'received_time': result.received_time,
-            'received_emergency_cmd': result.received_emergency_cmd,
-            'result': result.result,
-            'errors': [err for err in result.errors if isinstance(err, str) and len(err) > 0],
-        }
-        self._producer.send(json.dumps({
-            'cmdexe': message
-        }))
-"""
+        self._producer.send(result.data)
 
 
 def main():
@@ -155,6 +94,9 @@ def main():
     slop = float(params.thresholds.slop_ms)/1000.0
     ts = message_filters.ApproximateTimeSynchronizer([position_sub, compass_sub, battery_sub], 10, slop, allow_headerless=True)
     ts.registerCallback(robot_state.state_cb)
+
+    navi_result = NaviResult(producer)
+    rospy.Subscriber(params.topic.navi_cmdexe, String, navi_result.navi_result_cb)
 
     def handler(signum, frame):
         rospy.loginfo('shutting down...')
