@@ -7,7 +7,7 @@ from eams_msgs.msg import State
 def send():
     rospy.init_node('send_mission_state', anonymous=True)
     pub = rospy.Publisher('/mission/state', State, queue_size=10)
-    r = rospy.Rate(0.2)
+    r = rospy.Rate(1)
     while not rospy.is_shutdown():
         h = Header()
         h.stamp = rospy.Time.now()
@@ -20,7 +20,7 @@ def send():
         s.status = 0
 
         pub.publish(s)
-        rospy.loginfo('published %s', s)
+        rospy.loginfo('published state %s', s)
         r.sleep()
 
 

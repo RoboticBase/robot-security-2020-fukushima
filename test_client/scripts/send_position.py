@@ -9,7 +9,7 @@ from sensor_msgs.msg import NavSatFix, NavSatStatus
 def send():
     rospy.init_node('send_position', anonymous=True)
     pub = rospy.Publisher('/mavros/global_position/global', NavSatFix, queue_size=10)
-    r = rospy.Rate(3)
+    r = rospy.Rate(1)
     while not rospy.is_shutdown():
         h = Header()
         h.stamp = rospy.Time.now()
@@ -29,7 +29,7 @@ def send():
         nav.position_covariance_type = 0
 
         pub.publish(nav)
-        rospy.loginfo('published %s', nav)
+        rospy.loginfo('published position %s', nav)
         r.sleep()
 
 

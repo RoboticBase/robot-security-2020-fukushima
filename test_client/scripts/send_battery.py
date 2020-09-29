@@ -9,7 +9,7 @@ from sensor_msgs.msg import BatteryState
 def send():
     rospy.init_node('send_battery', anonymous=True)
     pub = rospy.Publisher('/mavros/battery', BatteryState, queue_size=10)
-    r = rospy.Rate(2)
+    r = rospy.Rate(1)
     while not rospy.is_shutdown():
         h = Header()
         h.stamp = rospy.Time.now()
@@ -32,7 +32,7 @@ def send():
         battery.serial_number = ''
 
         pub.publish(battery)
-        rospy.loginfo('published %s', battery)
+        rospy.loginfo('published battery %s', battery)
         r.sleep()
 
 
