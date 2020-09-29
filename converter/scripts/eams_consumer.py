@@ -122,10 +122,8 @@ class NaviCommand:
         return mission
 
     def _make_result(self, body):
-        message = {
-            'cmdexe': {}
-        }
-        message['cmdexe'][self._params.rb.navi_cmd_name] = {
+        message = {}
+        message[self._params.rb.navi_cmd_name] = {
             'time': datetime.fromtimestamp(rospy.Time.now().to_time(), timezone.utc).isoformat(),
             'received_time': body['time'],
             'received_cmd': body['cmd'],

@@ -1,5 +1,9 @@
 #!/usr/bin/env python
+import glob
+import hashlib
 import json
+import os
+import re
 import signal
 from datetime import datetime, timedelta, timezone
 from threading import Lock
@@ -16,10 +20,40 @@ from utils import wrap_namespace
 import message_filters_py3 as message_filters
 
 
-class RobotState:
+class Base:
     def __init__(self, producer):
-        self._params = wrap_namespace(rospy.get_param('~'))
         self._producer = producer
+
+        alg = hashlib.sha256()
+        paths = sorted([f for f in glob.glob(f'{os.path.dirname(os.path.abspath(__file__))}/../**', recursive=True)
+                        if re.search('.+\\.(txt|xml|launch|py)$', f)])
+        for path in paths:
+            with open(path, 'rb') as f:
+                while True:
+                    chunk = f.read(4096 * alg.block_size)
+                    if len(chunk) == 0:
+                        break
+                    alg.update(chunk)
+        self._digest = alg.hexdigest()
+        rospy.loginfo('digest=%s', self._digest)
+
+    def _send(self, key, message):
+        message['digest'] = self._digest
+        payload = {}
+        payload[key] = message
+        self._producer.send(json.dumps(payload))
+
+    def send_atts(self, message):
+        self._send('attrs', message)
+
+    def send_cmdexe(self, message):
+        self._send('cmdexe', message)
+
+
+class RobotState(Base):
+    def __init__(self, producer):
+        super().__init__(producer)
+        self._params = wrap_namespace(rospy.get_param('~'))
         self._prev_ms = datetime.now(timezone.utc)
         self._lock = Lock()
 
@@ -47,15 +81,13 @@ class RobotState:
                     'current': battery.current,
                 }
             }
-            self._producer.send(json.dumps({
-                'attrs': message,
-            }))
+            self.send_atts(message)
             self._lock.release()
 
 
-class ImageInformation:
+class ImageInformation(Base):
     def __init__(self, producer):
-        self._producer = producer
+        super().__init__(producer)
 
     def image_info_cb(self, image_info):
         rospy.loginfo('subscribe an image information message, %s', image_info)
@@ -70,19 +102,17 @@ class ImageInformation:
                 'path': image_info.path,
             }
         }
-        self._producer.send(json.dumps({
-            'attrs': message,
-        }))
+        self.send_atts(message)
 
 
-class NaviResult:
+class NaviResult(Base):
     def __init__(self, producer):
-        self._params = wrap_namespace(rospy.get_param('~'))
-        self._producer = producer
+        super().__init__(producer)
 
     def navi_result_cb(self, result):
         rospy.loginfo('subscribe a navi result, %s', result)
-        self._producer.send(result.data)
+        message = json.loads(result.data)
+        self.send_cmdexe(message)
 
 
 def main():
