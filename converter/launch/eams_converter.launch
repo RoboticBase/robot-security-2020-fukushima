@@ -11,8 +11,8 @@
   <arg name="ENTITY_TYPE" default="$(optenv ENTITY_TYPE robot)"/>
   <arg name="ENTITY_ID" default="$(optenv ENTITY_ID robot01)"/>
   <arg name="NAVI_CMD_NAME" default="$(optenv NAVI_CMD_NAME navi_cmd)"/>
-  <arg name="SEND_DELTA_MILLISEC" default="1000"/>
-  <arg name="SLOP_MILLISEC" default="500"/>
+  <arg name="SEND_DELTA_MILLISEC" default="500"/>
+  <arg name="SLOP_MILLISEC" default="1000"/>
   <arg name="MISSION_WAIT_MILLSEC" default="200"/>
   <arg name="WAYPOINT_WAIT_MILLSEC" default="1000"/>
 
@@ -49,6 +49,7 @@
     <param name="topic/position" value="/mavros/global_position/global"/>
     <param name="topic/compass" value="/mavros/global_position/compass_hdg"/>
     <param name="topic/battery" value="/mavros/battery"/>
+    <param name="topic/image_info" value="/camera/image_info"/>
     <param name="topic/navi_cmdexe" value="/navi_cmdexe"/>
     <param name="thresholds/send_delta_ms" value="$(arg SEND_DELTA_MILLISEC)"/>
     <param name="thresholds/slop_ms" value="$(arg SLOP_MILLISEC)"/>
