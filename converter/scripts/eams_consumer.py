@@ -94,7 +94,7 @@ class NaviCommand:
             waypint.command = 1
             waypint.lat = wp['latitude']
             waypint.lng = wp['longitude']
-            waypint.param1 = 0.0
+            waypint.param1 = wp['speed'] if wp.get('speed') else 0.0
             waypint.param2 = 0.0
             waypint.param3 = 0.0
             waypint.param4 = 0.0
