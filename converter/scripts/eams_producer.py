@@ -62,9 +62,14 @@ class RobotState(Base):
         now = datetime.now(timezone.utc)
         if now >= self._prev_ms + timedelta(milliseconds=self._params.thresholds.send_delta_ms) and self._lock.acquire(False):
             self._prev_ms = now
+            mode = 'init' if mode.status == 0 else \
+                   'navi' if mode.status == 1 else \
+                   'standby' if mode.status == 2 else \
+                   'suspend' if mode.status == 3 else \
+                   'error'
             message = {
                 'time': datetime.fromtimestamp(position.header.stamp.to_time(), timezone.utc).isoformat(),
-                'mode': 'init' if mode.status == 0 else 'navi' if mode.status == 1 else 'standby' if mode.status == 2 else 'error',
+                'mode': mode,
                 'pose': {
                     'point': {
                         'latitude': position.latitude,
