@@ -59,28 +59,29 @@ class NaviCommand:
         return control, mission
 
     def _make_control_and_mission(self, body):
-        if 'cmd' not in body or body['cmd'] not in ('start', 'stop', 'suspend'):
+        if 'command' not in body or body['command'] not in ('start', 'stop', 'suspend'):
             return None, None, None
 
         result = self._make_result(body)
+        cmd = body['command']
 
         h = Header()
         h.stamp = rospy.Time.now()
-        h.frame_id = body['cmd']
+        h.frame_id = cmd
         control = Control()
         control.header = h
-        if body['cmd'] == 'start':
+        if cmd == 'start':
             control.command = 1
             mission = self._make_mission(body)
             return control, mission, result
-        elif body['cmd'] == 'stop':
+        elif cmd == 'stop':
             control.command = 0
             return control, None, result
-        elif body['cmd'] == 'suspend':
+        elif cmd == 'suspend':
             control.command = 2
             return control, None, result
         else:
-            rospy.logerr('invalid cmd {}'.format(body['cmd']))
+            rospy.logerr('invalid command {}'.format(body['command']))
             return None, None, None
 
     def _make_mission(self, body):
@@ -92,8 +93,8 @@ class NaviCommand:
         for wp in body.get('waypoints', []):
             waypint = Detail()
             waypint.command = 1
-            waypint.lat = wp['pose']['latitude']
-            waypint.lng = wp['pose']['longitude']
+            waypint.lat = wp['point']['latitude']
+            waypint.lng = wp['point']['longitude']
             waypint.param1 = wp['speed'] if wp.get('speed') else 0.0
             waypint.param2 = 0.0
             waypint.param3 = 0.0
@@ -126,7 +127,7 @@ class NaviCommand:
         message[self._params.rb.navi_cmd_name] = {
             'time': datetime.fromtimestamp(rospy.Time.now().to_time(), timezone.utc).isoformat(),
             'received_time': body['time'],
-            'received_cmd': body['cmd'],
+            'received_command': body['command'],
             'received_waypoints': body['waypoints'],
             'result': 'ack',
             'errors': [],
