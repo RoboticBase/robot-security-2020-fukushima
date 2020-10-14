@@ -10,7 +10,7 @@
   <arg name="AMQP_PRODUCER_QUEUE" default="$(optenv AMQP_PRODUCER_QUEUE examples)"/>
   <arg name="ENTITY_TYPE" default="$(optenv ENTITY_TYPE robot)"/>
   <arg name="ENTITY_ID" default="$(optenv ENTITY_ID robot01)"/>
-  <arg name="NAVI_CMD_NAME" default="$(optenv NAVI_CMD_NAME navi_cmd)"/>
+  <arg name="NAVI_CMD_NAME" default="$(optenv NAVI_CMD_NAME naviCmd)"/>
   <arg name="SEND_DELTA_MILLISEC" default="500"/>
   <arg name="SLOP_MILLISEC" default="1000"/>
   <arg name="MISSION_WAIT_MILLSEC" default="200"/>

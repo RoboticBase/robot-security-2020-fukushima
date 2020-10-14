@@ -38,7 +38,9 @@ class Base:
         rospy.loginfo('digest=%s', self._digest)
 
     def _send(self, key, message):
-        message['digest'] = self._digest
+        if 'metadata' not in message:
+            message['metadata'] = {}
+        message['metadata']['digest'] = self._digest
         payload = {}
         payload[key] = message
         self._producer.send(json.dumps(payload))
@@ -56,20 +58,16 @@ class RobotState(Base):
         self._params = wrap_namespace(rospy.get_param('~'))
         self._prev_ms = datetime.now(timezone.utc)
         self._lock = Lock()
+        self.mode = 'init'
 
-    def state_cb(self, mode, position, compass, battery):
-        rospy.loginfo('subscribe a state message, mode=%s, position=%s, compass=%s, battery=%s', mode, position, compass, battery)
+    def state_cb(self, position, compass, battery):
+        rospy.loginfo('subscribe telemetries , position=%s, compass=%s, battery=%s', position, compass, battery)
         now = datetime.now(timezone.utc)
         if now >= self._prev_ms + timedelta(milliseconds=self._params.thresholds.send_delta_ms) and self._lock.acquire(False):
             self._prev_ms = now
-            mode = 'init' if mode.status == 0 else \
-                   'navi' if mode.status == 1 else \
-                   'standby' if mode.status == 2 else \
-                   'suspend' if mode.status == 3 else \
-                   'error'
             message = {
                 'time': datetime.fromtimestamp(position.header.stamp.to_time(), timezone.utc).isoformat(),
-                'mode': mode,
+                'mode': self.mode,
                 'pose': {
                     'point': {
                         'latitude': position.latitude,
@@ -77,17 +75,30 @@ class RobotState(Base):
                         'altitude': position.altitude,
                     },
                     'angle': {
-                        'yaw': compass.data,
+                        'theta': compass.data,
                     },
                 },
-                'covariance': list(position.position_covariance),
+                'accuracy': {
+                    'covariance': list(position.position_covariance),
+                },
                 'battery': {
                     'voltage': battery.voltage,
                     'current': battery.current,
-                }
+                },
+                'destination': {},
+                'errors': list(),
             }
             self.send_atts(message)
             self._lock.release()
+
+
+    def mode_cb(self, state):
+        rospy.loginfo('subscribe a state message, %s', state)
+        self.mode = 'init' if state.status == 0 else \
+            'navi' if state.status == 1 else \
+            'standby' if state.status == 2 else \
+            'suspend' if state.status == 3 else \
+            'error'
 
 
 class ImageInformation(Base):
@@ -102,10 +113,10 @@ class ImageInformation(Base):
                 'time': image_info.time,
                 'latitude': image_info.lat,
                 'longitude': image_info.lng,
-                'yaw': image_info.yaw,
+                'theta': image_info.yaw,
                 'hash': image_info.hash,
                 'path': image_info.path,
-            }
+            },
         }
         self.send_atts(message)
 
@@ -127,14 +138,15 @@ def main():
     producer = Producer()
 
     robot_state = RobotState(producer)
-    mode_sub = message_filters.Subscriber(params.topic.mission_state, State)
     position_sub = message_filters.Subscriber(params.topic.position, NavSatFix)
     compass_sub = message_filters.Subscriber(params.topic.compass, Float64)
     battery_sub = message_filters.Subscriber(params.topic.battery, BatteryState)
 
     slop = float(params.thresholds.slop_ms)/1000.0
-    ts = message_filters.ApproximateTimeSynchronizer([mode_sub, position_sub, compass_sub, battery_sub], 10, slop, allow_headerless=True)
+    ts = message_filters.ApproximateTimeSynchronizer([position_sub, compass_sub, battery_sub], 10, slop, allow_headerless=True)
     ts.registerCallback(robot_state.state_cb)
+
+    rospy.Subscriber(params.topic.mission_state, State, robot_state.mode_cb)
 
     image_info = ImageInformation(producer)
     rospy.Subscriber(params.topic.image_info, ImageInfo, image_info.image_info_cb)

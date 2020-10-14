@@ -92,23 +92,23 @@ class NaviCommand:
         for wp in body.get('waypoints', []):
             waypint = Detail()
             waypint.command = 1
-            waypint.lat = wp['latitude']
-            waypint.lng = wp['longitude']
+            waypint.lat = wp['pose']['latitude']
+            waypint.lng = wp['pose']['longitude']
             waypint.param1 = wp['speed'] if wp.get('speed') else 0.0
             waypint.param2 = 0.0
             waypint.param3 = 0.0
             waypint.param4 = 0.0
             details.append(waypint)
-            if 'yaw' in wp and wp['yaw'] is not None:
-                yaw = Detail()
-                yaw.command = 3
-                yaw.lat = 0.0
-                yaw.lng = 0.0
-                yaw.param1 = wp['yaw']
-                yaw.param2 = 0.0
-                yaw.param3 = 0.0
-                yaw.param4 = 0.0
-                details.append(yaw)
+            if 'theta' in wp['angle'] and wp['angle']['theta'] is not None:
+                theta = Detail()
+                theta.command = 3
+                theta.lat = 0.0
+                theta.lng = 0.0
+                theta.param1 = wp['angle']['theta']
+                theta.param2 = 0.0
+                theta.param3 = 0.0
+                theta.param4 = 0.0
+                details.append(theta)
             delay = Detail()
             delay.command = 2
             delay.lat = 0.0
