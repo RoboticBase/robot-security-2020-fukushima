@@ -1,0 +1,105 @@
+{
+    "type": "object",
+    "properties": {
+        "time": {
+            "type": "string",
+            "format": "date-time"
+        },
+        "received_time": {
+            "type": "string",
+            "format": "date-time"
+        },
+        "received_command": {
+            "type": "string"
+        },
+        "received_waypoints": {
+            "type": "array",
+            "items": {
+                "type": "object",
+                "properties": {
+                    "point": {
+                        "type": "object",
+                        "properties": {
+                            "latitude": {
+                                "type": "number"
+                            },
+                            "longitude": {
+                                "type": "number"
+                            },
+                            "altitude": {
+                                "type": "number"
+                            }
+                        },
+                        "additionalProperties": false,
+                        "required": [
+                            "latitude",
+                            "longitude",
+                            "altitude"
+                        ]
+                    },
+                    "angle": {
+                        "type": "object",
+                        "properties": {
+                            "theta": {
+                                "type": [
+                                    "number",
+                                    "null"
+                                ]
+                            }
+                        },
+                        "additionalProperties": false,
+                        "required": [
+                            "theta"
+                        ]
+                    },
+                    "speed": {
+                        "type": [
+                            "number",
+                            "null"
+                        ]
+                    }
+                },
+                "additionalProperties": false,
+                "required": [
+                    "point",
+                    "angle"
+                ]
+            }
+        },
+        "result": {
+            "type": "string",
+            "enum": [
+                "ack",
+                "error"
+            ]
+        },
+        "errors": {
+            "type": "array"
+        },
+        "metadata": {
+            "type": "object",
+            "properties": {
+                "digest": {
+                    "type": "string",
+                    "enum": [
+                        ""
+                    ]
+                }
+            },
+            "additionalProperties": false,
+            "required": [
+                "digest"
+            ]
+        }
+    },
+    "additionalProperties": false,
+    "required": [
+        "time",
+        "received_time",
+        "received_command",
+        "received_waypoints",
+        "result",
+        "errors",
+        "metadata"
+    ]
+}
