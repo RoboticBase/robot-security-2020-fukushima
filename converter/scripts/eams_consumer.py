@@ -115,7 +115,7 @@ class NaviCommand:
             delay.lat = 0.0
             delay.lng = 0.0
             delay.param1 = self._waypoint_wait_ms
-            delay.param2 = 0.0
+            delay.param2 = wp['map'] if wp.get('map') else 0.0
             delay.param3 = 0.0
             delay.param4 = 0.0
             details.append(delay)
