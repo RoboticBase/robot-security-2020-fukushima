@@ -38,5 +38,6 @@ services:
       - ./test_client:/opt/rosws/src/test_client
       - ./uoa_poc3_msgs:/opt/rosws/src/uoa_poc3_msgs
       - ./eams_msgs:/opt/rosws/src/eams_msgs
+      - ./20201009_cartographer_velodyne_mission.bag:/opt/20201009_cartographer_velodyne_mission.bag
     depends_on:
       - master
