@@ -110,12 +110,22 @@ class NaviCommand:
                 theta.param3 = 0.0
                 theta.param4 = 0.0
                 details.append(theta)
+            if 'metadata' in wp and 'map' in wp['metadata'] and wp['metadata']['map'] is not None:
+                mp = Detail()
+                mp.command = 2
+                mp.lat = 0.0
+                mp.lng = 0.0
+                mp.param1 = 0.0
+                mp.param2 = wp['metadata']['map']
+                mp.param3 = 0.0
+                mp.param4 = 0.0
+                details.append(mp)
             delay = Detail()
             delay.command = 2
             delay.lat = 0.0
             delay.lng = 0.0
             delay.param1 = wp['metadata']['delay'] if 'metadata' in wp and wp['metadata'].get('delay') else 0.0
-            delay.param2 = wp['metadata']['map'] if 'metadata' in wp and wp['metadata'].get('map') else 0.0
+            delay.param2 = 0.0
             delay.param3 = 0.0
             delay.param4 = 0.0
             details.append(delay)
