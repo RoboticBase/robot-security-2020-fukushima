@@ -19,9 +19,9 @@ services:
       - ROS_MASTER_URI=http://master:11311
     volumes:
       - ./client.sh:/opt/client.sh
-      - ./converter:/opt/rosws/src/converter
-      - ./uoa_poc3_msgs:/opt/rosws/src/uoa_poc3_msgs
-      - ./eams_msgs:/opt/rosws/src/eams_msgs
+      - ../../converter:/opt/rosws/src/converter
+      - ../../uoa_poc3_msgs:/opt/rosws/src/uoa_poc3_msgs
+      - ../../eams_msgs:/opt/rosws/src/eams_msgs
     env_file:
       - .env
     depends_on:
@@ -35,9 +35,9 @@ services:
       - ROS_HOSTNAME=terminal
       - ROS_MASTER_URI=http://master:11311
     volumes:
-      - ./test_client:/opt/rosws/src/test_client
-      - ./uoa_poc3_msgs:/opt/rosws/src/uoa_poc3_msgs
-      - ./eams_msgs:/opt/rosws/src/eams_msgs
-      - ./20201009_cartographer_velodyne_mission.bag:/opt/20201009_cartographer_velodyne_mission.bag
+      - ../../test_client:/opt/rosws/src/test_client
+      - ../../uoa_poc3_msgs:/opt/rosws/src/uoa_poc3_msgs
+      - ../../eams_msgs:/opt/rosws/src/eams_msgs
+      - ../../20201009_cartographer_velodyne_mission.bag:/opt/20201009_cartographer_velodyne_mission.bag
     depends_on:
       - master
