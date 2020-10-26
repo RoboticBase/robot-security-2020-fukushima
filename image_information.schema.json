@@ -1,63 +1,72 @@
 {
     "type": "object",
     "properties": {
-        "time": {
-            "type": "string",
-            "format": "date-time"
-        },
-        "image": {
+        "attrs": {
             "type": "object",
             "properties": {
                 "time": {
-                    "type": "string"
-                },
-                "latitude": {
-                    "type": "string"
-                },
-                "longitude": {
-                    "type": "string"
-                },
-                "theta": {
-                    "type": "string"
-                },
-                "hash": {
-                    "type": "string"
-                },
-                "path": {
                     "type": "string",
-                    "format": "uri"
-                }
-            },
-            "additionalProperties": false,
-            "required": [
-                "time",
-                "latitude",
-                "longitude",
-                "theta",
-                "hash",
-                "path"
-            ]
-        },
-        "metadata": {
-            "type": "object",
-            "properties": {
-                "digest": {
-                    "type": "string",
-                    "enum": [
-                        ""
+                    "format": "date-time"
+                },
+                "image": {
+                    "type": "object",
+                    "properties": {
+                        "time": {
+                            "type": "string"
+                        },
+                        "latitude": {
+                            "type": "string"
+                        },
+                        "longitude": {
+                            "type": "string"
+                        },
+                        "theta": {
+                            "type": "string"
+                        },
+                        "hash": {
+                            "type": "string"
+                        },
+                        "path": {
+                            "type": "string",
+                            "format": "uri"
+                        }
+                    },
+                    "additionalProperties": false,
+                    "required": [
+                        "time",
+                        "latitude",
+                        "longitude",
+                        "theta",
+                        "hash",
+                        "path"
+                    ]
+                },
+                "metadata": {
+                    "type": "object",
+                    "properties": {
+                        "digest": {
+                            "type": "string",
+                            "enum": [
+                                ""
+                            ]
+                        }
+                    },
+                    "additionalProperties": false,
+                    "required": [
+                        "digest"
                     ]
                 }
             },
             "additionalProperties": false,
             "required": [
-                "digest"
+                "time",
+                "image",
+                "metadata"
             ]
         }
     },
     "additionalProperties": false,
     "required": [
-        "time",
-        "image",
-        "metadata"
+        "attrs"
     ]
 }
