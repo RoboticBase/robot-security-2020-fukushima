@@ -23,9 +23,10 @@ class WatermarkGenerator:
         try:
             cv_image = self.bridge.imgmsg_to_cv2(image_message, desired_encoding='bgr8')
             self.put_text(cv_image, text)
-            path = '{}.png'.format(os.path.join(self.output_path, str(uuid.uuid4())))
+            file_name = '{}.png'.format(str(uuid.uuid4()))
+            path = os.path.join(self.output_path, file_name)
             cv2.imwrite(path, cv_image)
-            return path
+            return file_name
         except CvBridgeError as e:
             print(e)
             return ''

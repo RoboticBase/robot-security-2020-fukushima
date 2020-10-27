@@ -1,4 +1,6 @@
 *.pyc
 *.log
+.DS_Store
 __pycache__/
 images/watermarked/*
+.env

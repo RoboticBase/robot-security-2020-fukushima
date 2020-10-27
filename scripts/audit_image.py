@@ -7,6 +7,7 @@ import pytz
 import time
 from sensor_msgs.msg import Image as ImageMSG
 from ros_audit_image.watermark_generator import WatermarkGenerator
+from ros_audit_image.azure_blob_storage_controller import AzureBlobStorageController
 
 NODE_NAME = 'audit_image'
 
@@ -25,8 +26,10 @@ def callback(image_message):
     print(hashed_watermark_text)
     print(watermark_text)
     generator = WatermarkGenerator()
-    generator.generate(image_message,
-                       '{}\n{}'.format(hashed_watermark_text, watermark_text))
+    file_name = generator.generate(image_message,
+                                   '{}\n{}'.format(hashed_watermark_text, watermark_text))
+    controller = AzureBlobStorageController(generator.output_path)
+    controller.upload(file_name)
     elapsed_time = time.time() - start
     print("elapsed_time: " + str(elapsed_time) + "[sec]")
     print("generate finish")
