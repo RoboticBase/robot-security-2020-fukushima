@@ -45,7 +45,7 @@
     <param name="rb/entity_type" value="$(arg ENTITY_TYPE)"/>
     <param name="rb/entity_id" value="$(arg ENTITY_ID)"/>
     <param name="rb/navi_cmd_name" value="$(arg NAVI_CMD_NAME)"/>
-    <param name="topic/mission_state" value="/mission/state"/>
+    <param name="topic/mission_state" value="/command/state"/>
     <param name="topic/position" value="/mavros/global_position/global"/>
     <param name="topic/compass" value="/mavros/global_position/compass_hdg"/>
     <param name="topic/battery" value="/mavros/battery"/>
