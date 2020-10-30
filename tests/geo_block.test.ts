@@ -1,6 +1,6 @@
-import { assertEquals } from "https://deno.land/std@0.73.0/testing/asserts.ts";
+import { assertEquals } from "../deps.ts";
 import { GeoBlock } from "../src/geo_block.ts";
-import { Point } from "../src/point.ts";
+import { Point } from "../src/types.ts";
 import { Parameters } from "./utils/parameters_test.ts";
 
 const geoBlock = new GeoBlock(

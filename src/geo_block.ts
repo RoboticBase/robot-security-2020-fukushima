@@ -1,4 +1,4 @@
-import type { Point } from "./point.ts";
+import type { Point, BlockPoints } from "./types.ts";
 
 // Points for connecting diagonal lines
 //
@@ -8,7 +8,6 @@ import type { Point } from "./point.ts";
 //        |                |
 //        -----------------* Point2
 
-type BlockPoints = [Point, Point];
 
 export class GeoBlock {
   private hightLatitude: number;
