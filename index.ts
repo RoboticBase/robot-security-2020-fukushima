@@ -39,6 +39,7 @@ router
     } catch (e) {
       context.response.status = Status.BadRequest;
       context.response.body = { "error": e.message };
+      log.error({"message": "Security Geo Fence: Bad Request"})
     }
   });
 
