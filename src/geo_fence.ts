@@ -1,5 +1,5 @@
 import { GeoBlock } from "./geo_block.ts";
-import { Point } from "./point.ts";
+import type { Point } from "./point.ts";
 
 
 export class GeoFence {
