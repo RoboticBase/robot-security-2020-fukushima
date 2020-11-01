@@ -56,7 +56,7 @@ export class StuckChecker {
         { "message": `Error, "${entityId}" stuck`, point: currentPoint },
       );
     } else {
-      log.error({ "message": `OK, "${entityId}"`, point: currentPoint });
+      log.info({ "message": `OK, "${entityId}"`, point: currentPoint });
     }
   }
   async updatePoseHistory(
