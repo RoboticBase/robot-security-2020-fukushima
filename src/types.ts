@@ -4,13 +4,26 @@ export interface Point {
 }
 
 export type PointTime = { time: Date; latitude: number; longitude: number };
-export type pointHistory = [PointTime]
+export type PointHistory = [PointTime];
 
 export type NGSIPointHistoryEntity = {
   id: string;
   type: string;
+  pointHistory: { type: string; value: PointHistory; metadata: {} };
+  metadata: {};
+};
+
+export type NGSIPoseAttribute = {
+  type: string;
   value: {
-    pointHistory: pointHistory
+    angle: {
+      theta: number;
+    };
+    point: {
+      altitude: number;
+      latitdue: number;
+      longitude: number;
+    };
   };
   metadata: {};
 };
