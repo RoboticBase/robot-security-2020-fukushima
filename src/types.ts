@@ -9,7 +9,11 @@ export type PointHistory = [PointTime];
 export type NGSIPointHistoryEntity = {
   id: string;
   type: string;
-  pointHistory: { type: string; value: PointHistory; metadata: {} };
+  pointHistory: {
+    type: string;
+    value: { history: PointHistory };
+    metadata: {};
+  };
   metadata: {};
 };
 

@@ -1,4 +1,12 @@
-import { DEFAULT_ALLOWABLE_COUNT, DEFAULT_LOOP_SLEEP_SECOND, DEFAULT_RANGE_METERS, POINT_HISTORY_ID_PREFIX } from "./const.ts";
+import {
+  DEFAULT_ALLOWABLE_COUNT,
+  DEFAULT_ENTITY_ID,
+  DEFAULT_FIWARE_SERVICE,
+  DEFAULT_FIWARE_SERVICEPATH,
+  DEFAULT_LOOP_SLEEP_SECOND,
+  DEFAULT_RANGE_METERS,
+  POINT_HISTORY_ID_PREFIX,
+} from "./const.ts";
 import { OrionClient } from "./orion_client.ts";
 import {
   NGSIPointHistoryEntity,
@@ -20,13 +28,13 @@ export class StuckChecker {
     this.orionClient = new OrionClient();
   }
   async startLoop(
-    entityId: string,
-    fiwareService: string,
-    fiwareServicePath: string,
+    entityId: string = DEFAULT_ENTITY_ID,
+    fiwareService: string = DEFAULT_FIWARE_SERVICE,
+    fiwareServicePath: string = DEFAULT_FIWARE_SERVICEPATH,
   ) {
     while (true) {
       await this.execute(entityId, fiwareService, fiwareServicePath);
-      await sleep(DEFAULT_LOOP_SLEEP_SECOND)
+      await sleep(DEFAULT_LOOP_SLEEP_SECOND);
     }
   }
   async execute(
@@ -71,7 +79,7 @@ export class StuckChecker {
       fiwareServicePath,
     );
     const pointHistory = this.getUpdatedPointHistory(
-      entity.pointHistory.value,
+      entity.pointHistory.value.history,
       currentPoint,
     );
     await this.orionClient.patchAttr<PointHistory>(
@@ -113,7 +121,7 @@ export class StuckChecker {
       fiwareService,
       fiwareServicePath,
     );
-    return entity.pointHistory.value.every((p) =>
+    return entity.pointHistory.value.history.every((p) =>
       this.range >
         this.calculateDistance(
           point,
