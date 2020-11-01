@@ -4,7 +4,7 @@ export interface Point {
 }
 
 export type PointTime = { time: Date; latitude: number; longitude: number };
-export type PointHistory = [PointTime];
+export type PointHistory = Array<PointTime>;
 
 export type NGSIPointHistoryEntity = {
   id: string;
@@ -25,7 +25,7 @@ export type NGSIPoseAttribute = {
     };
     point: {
       altitude: number;
-      latitdue: number;
+      latitude: number;
       longitude: number;
     };
   };

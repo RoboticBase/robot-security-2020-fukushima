@@ -27,7 +27,7 @@ export class OrionClient {
     fiwareService: string,
     fiwareServicePath: string,
   ): Promise<T> {
-    const url = `${this.endpoint}/v2/entities/${id}?attrs=${attrs}`;
+    const url = `${this.endpoint}/v2/entities/${id}/attrs/${attrs}`;
     const response = await fetch(
       url,
       {

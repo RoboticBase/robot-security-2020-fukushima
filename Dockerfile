@@ -13,4 +13,4 @@ ENV PATH $DENO_INSTALL/bin:$PATH
 COPY . $DIRPATH
 
 
-ENTRYPOINT deno run --allow-net --allow-read --allow-env index.ts
+ENTRYPOINT deno run --allow-env --allow-net index.ts

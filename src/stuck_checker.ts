@@ -49,11 +49,11 @@ export class StuckChecker {
       fiwareServicePath,
     );
     const currentPoint: Point = {
-      latitude: poseAttr.value.point.latitdue,
+      latitude: poseAttr.value.point.latitude,
       longitude: poseAttr.value.point.longitude,
     };
     if (
-      this.isStuck(
+      await this.isStuck(
         currentPoint,
         entityId,
         fiwareService,
@@ -66,6 +66,7 @@ export class StuckChecker {
     } else {
       logger.info({ "message": `OK, "${entityId}"`, point: currentPoint });
     }
+    await this.updatePoseHistory(currentPoint, entityId, fiwareService, fiwareServicePath);
   }
   async updatePoseHistory(
     currentPoint: Point,
@@ -115,12 +116,15 @@ export class StuckChecker {
     entityId: string,
     fiwareService: string,
     fiwareServicePath: string,
-  ) {
+  ): Promise<boolean> {
     const entity = await this.orionClient.getEntity<NGSIPointHistoryEntity>(
-      entityId,
+      `${POINT_HISTORY_ID_PREFIX}_${entityId}`,
       fiwareService,
       fiwareServicePath,
     );
+    if (entity.pointHistory.value.history.length <= this.allowableCount) {
+      return false;
+    }
     return entity.pointHistory.value.history.every((p) =>
       this.range >
         this.calculateDistance(
