@@ -1,11 +1,33 @@
 import { DEFAULT_ALLOWABLE_COUNT, DEFAULT_RANGE_METERS } from "./const.ts";
-import { Point } from "./types.ts";
+import { OrionClient } from "./orion_client.ts";
+import { NGSIPointHistoryEntity, Point } from "./types.ts";
 
 class StuckChecker {
+  private orionClient: OrionClient;
   constructor(
     private allowableCount: number = DEFAULT_ALLOWABLE_COUNT,
     private range: number = DEFAULT_RANGE_METERS,
   ) {
+    this.orionClient = new OrionClient();
+  }
+  async isStuck(
+    point: Point,
+    entityId: string,
+    fiwareService: string,
+    fiwareServicePath: string,
+  ) {
+    const entity = await this.orionClient.getEntity<NGSIPointHistoryEntity>(
+      entityId,
+      fiwareService,
+      fiwareServicePath,
+    );
+    return entity.value.pointHistory.every(p => 
+      this.range >
+        this.calculateDistance(
+          point,
+          { latitude: p.latitude, longitude: p.longitude },
+        )
+    );
   }
 
   // Calculate the earth as a true sphere.

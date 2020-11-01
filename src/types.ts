@@ -4,14 +4,13 @@ export interface Point {
 }
 
 export type PointTime = { time: Date; latitude: number; longitude: number };
+export type pointHistory = [PointTime]
 
 export type NGSIPointHistoryEntity = {
   id: string;
   type: string;
   value: {
-    pointHistory: [
-        PointTime
-    ];
+    pointHistory: pointHistory
   };
   metadata: {};
 };
