@@ -60,11 +60,11 @@ export class StuckChecker {
         fiwareServicePath,
       )
     ) {
-      log.error(
+      logger.error(
         { "message": `Error, "${entityId}" stuck`, point: currentPoint },
       );
     } else {
-      log.info({ "message": `OK, "${entityId}"`, point: currentPoint });
+      logger.info({ "message": `OK, "${entityId}"`, point: currentPoint });
     }
   }
   async updatePoseHistory(
