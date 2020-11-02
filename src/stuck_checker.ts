@@ -9,10 +9,11 @@ import {
 } from "./const.ts";
 import { OrionClient } from "./orion_client.ts";
 import {
-  NGSIPointHistoryEntity,
+  NGSIStuckCheckerEntity,
   NGSIPoseAttribute,
   Point,
   PointHistory,
+  NGSIPointHistoryAttribute,
 } from "./types.ts";
 import { log } from "../deps.ts";
 import { sleep } from "./utils.ts";
@@ -66,7 +67,12 @@ export class StuckChecker {
     } else {
       logger.info({ "message": `OK, "${entityId}"`, point: currentPoint });
     }
-    await this.updatePoseHistory(currentPoint, entityId, fiwareService, fiwareServicePath);
+    await this.updatePoseHistory(
+      currentPoint,
+      entityId,
+      fiwareService,
+      fiwareServicePath,
+    );
   }
   async updatePoseHistory(
     currentPoint: Point,
@@ -74,7 +80,7 @@ export class StuckChecker {
     fiwareService: string,
     fiwareServicePath: string,
   ) {
-    const entity = await this.orionClient.getEntity<NGSIPointHistoryEntity>(
+    const entity = await this.orionClient.getEntity<NGSIStuckCheckerEntity>(
       `${POINT_HISTORY_ID_PREFIX}_${entityId}`,
       fiwareService,
       fiwareServicePath,
@@ -83,9 +89,15 @@ export class StuckChecker {
       entity.pointHistory.value.history,
       currentPoint,
     );
-    await this.orionClient.patchAttr<PointHistory>(
-      entityId,
-      pointHistory,
+    await this.orionClient.patchAttr<NGSIPointHistoryAttribute>(
+      `${POINT_HISTORY_ID_PREFIX}_${entityId}`,
+      {
+        pointHistory: {
+          type: "object",
+          value: { history: pointHistory },
+          metadata: {},
+        },
+      },
       fiwareService,
       fiwareServicePath,
     );
@@ -103,7 +115,7 @@ export class StuckChecker {
       },
     );
     if (updatedPointHistory.length >= this.allowableCount) {
-      updatedPointHistory.slice(
+      return updatedPointHistory.slice(
         updatedPointHistory.length - this.allowableCount,
         updatedPointHistory.length,
       );
@@ -117,12 +129,12 @@ export class StuckChecker {
     fiwareService: string,
     fiwareServicePath: string,
   ): Promise<boolean> {
-    const entity = await this.orionClient.getEntity<NGSIPointHistoryEntity>(
+    const entity = await this.orionClient.getEntity<NGSIStuckCheckerEntity>(
       `${POINT_HISTORY_ID_PREFIX}_${entityId}`,
       fiwareService,
       fiwareServicePath,
     );
-    if (entity.pointHistory.value.history.length <= this.allowableCount) {
+    if (entity.pointHistory.value.history.length < this.allowableCount) {
       return false;
     }
     return entity.pointHistory.value.history.every((p) =>

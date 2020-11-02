@@ -59,6 +59,5 @@ export class OrionClient {
         },
       },
     );
-    return await response.json();
   }
 }

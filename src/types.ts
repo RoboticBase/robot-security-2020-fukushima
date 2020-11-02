@@ -6,7 +6,7 @@ export interface Point {
 export type PointTime = { time: Date; latitude: number; longitude: number };
 export type PointHistory = Array<PointTime>;
 
-export type NGSIPointHistoryEntity = {
+export type NGSIStuckCheckerEntity = {
   id: string;
   type: string;
   pointHistory: {
@@ -16,6 +16,13 @@ export type NGSIPointHistoryEntity = {
   };
   metadata: {};
 };
+export type NGSIPointHistoryAttribute = {
+  pointHistory: {
+    type: string;
+    value: { history: PointHistory };
+    metadata: {};
+  };
+}
 
 export type NGSIPoseAttribute = {
   type: string;
