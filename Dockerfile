@@ -16,5 +16,4 @@ RUN pip install -r src/ros_audit_image/requirements.txt && \
     /opt/ros/kinetic/bin/catkin_make && \
     echo "source /opt/ros/kinetic/setup.bash" >> /root/.bashrc && \
     echo "source /opt/ros_ws/devel/setup.bash" >> /root/.bashrc
-RUN source /opt/ros_ws/src/ros_audit_image/.env
 RUN rm /bin/sh && mv /bin/sh_tmp /bin/sh

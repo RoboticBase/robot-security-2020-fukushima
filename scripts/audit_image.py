@@ -6,8 +6,8 @@ import rospy
 import pytz
 import time
 from sensor_msgs.msg import Image as ImageMSG
-from ros_audit_image.watermark_generator import WatermarkGenerator
-from ros_audit_image.azure_blob_storage_controller import AzureBlobStorageController
+from watermark_generator import WatermarkGenerator
+from azure_blob_storage_controller import AzureBlobStorageController
 
 NODE_NAME = 'audit_image'
 
