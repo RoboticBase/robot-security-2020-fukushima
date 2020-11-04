@@ -9,6 +9,7 @@ RUN apt-get update && apt-get upgrade -y && \
     pip install -U pip
 
 COPY . /opt/ros_ws/src/ros_audit_image
+COPY ./eams_msgs /opt/ros_ws/src/eams_msgs
 WORKDIR /opt/ros_ws
 
 RUN pip install -r src/ros_audit_image/requirements.txt && \

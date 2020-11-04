@@ -1,3 +1,11 @@
+robot_id: "robot01"
+thresholds:
+  slop_ms: 100.0
+topic:
+  image_info: "/camera/image_info"
+  image_raw: "image_raw"
+  position: "/mavros/global_position/global"
+  compass: "/mavros/global_position/compass_hdg"
 watermark_image:
   output_path: "/opt/ros_ws/src/ros_audit_image/images/watermarked/"
   base_image_path: "/opt/ros_ws/src/ros_audit_image/images/IMG_3431.jpeg"
