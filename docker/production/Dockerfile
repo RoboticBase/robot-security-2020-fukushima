@@ -28,7 +28,7 @@ RUN source /opt/ros/kinetic/setup.bash && \
     cd /opt/rosws && \
     catkin_make && \
     echo 'source /opt/ros/kinetic/setup.bash' >> /root/.bashrc && \
-    echo 'source /opt/rosws/devel/setup.bash' >> /root/.bashrc && \
+    echo 'source /opt/rosws/devel/setup.bash' >> /root/.bashrc
 
 RUN source /root/.bashrc && \
     apt install -y build-essential pkg-config libssl-dev openssl swig && \
