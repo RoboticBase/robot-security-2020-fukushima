@@ -3,11 +3,6 @@ SHELL ["/bin/bash", "-c"]
 ENV TINI_VERSION v0.19.0
 ADD https://github.com/krallin/tini/releases/download/${TINI_VERSION}/tini /tini
 
-COPY ./converter /opt/rosws/src/converter
-COPY ./uoa_poc3_msgs /opt/rosws/src/uoa_poc3_msgs
-COPY ./eams_msgs /opt/rosws/src/eams_msgs
-COPY ./docker/production/client.sh /opt/client.sh
-
 RUN chmod +x /tini
 RUN apt update && apt upgrade -y && \
     apt install -y git gcc make build-essential libssl-dev zlib1g-dev libbz2-dev libreadline-dev libsqlite3-dev wget curl llvm libncurses5-dev xz-utils tk-dev libxml2-dev libxmlsec1-dev libffi-dev liblzma-dev && \
@@ -19,14 +14,21 @@ RUN apt update && apt upgrade -y && \
     mkdir -p /opt/rosws/src && \
     cd /opt/rosws/src && \
     catkin_init_workspace && \
-    cd /opt/rosws && \
-    catkin_make && \
-    echo 'source /opt/ros/kinetic/setup.bash' >> /root/.bashrc && \
-    echo 'source /opt/rosws/devel/setup.bash' >> /root/.bashrc && \
     git clone https://github.com/pyenv/pyenv.git /root/.pyenv && \
     /root/.pyenv/bin/pyenv init - && \
     /root/.pyenv/bin/pyenv install 3.8.6 && \
     /root/.pyenv/bin/pyenv global 3.8.6
+
+COPY ./converter /opt/rosws/src/converter
+COPY ./uoa_poc3_msgs /opt/rosws/src/uoa_poc3_msgs
+COPY ./eams_msgs /opt/rosws/src/eams_msgs
+COPY ./docker/production/client.sh /opt/client.sh
+
+RUN source /opt/ros/kinetic/setup.bash && \
+    cd /opt/rosws && \
+    catkin_make && \
+    echo 'source /opt/ros/kinetic/setup.bash' >> /root/.bashrc && \
+    echo 'source /opt/rosws/devel/setup.bash' >> /root/.bashrc && \
 
 RUN source /root/.bashrc && \
     apt install -y build-essential pkg-config libssl-dev openssl swig && \
