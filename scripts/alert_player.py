@@ -14,7 +14,7 @@ def play(sound_name):
     rospy.sleep(sleep_time)
     rospy.loginfo('Playing {}'.format(sound_name))
     alert_base_path = params['alert_base_path']
-    soundhandle.playWave("{}{}.ogg".format(alert_base_path, sound_name), volume)
+    soundhandle.playWave("{}{}.ogg".format(alert_base_path, sound_name.data), volume)
     rospy.sleep(sleep_time)
 
 
