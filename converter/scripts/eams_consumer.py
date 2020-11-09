@@ -15,9 +15,10 @@ from utils import wrap_namespace
 
 
 class Dispatcher:
-    def __init__(self, naviCommand):
+    def __init__(self, naviCommand, alertCommand):
         self._params = wrap_namespace(rospy.get_param('~'))
         self._naviCommand = naviCommand
+        self._alertCommand = alertCommand
 
     def dispatch_cb(self, msg):
         rospy.loginfo('consume a command message, %s', msg)
@@ -30,10 +31,23 @@ class Dispatcher:
                 body = message['cmd'][self._params.rb.navi_cmd_name]
                 ros_published_control, ros_published_mission = self._naviCommand.process(body)
                 rospy.loginfo('processed the navi command, control=%s, mission=%s', ros_published_control, ros_published_mission)
+            elif self._params.rb.alert_cmd_name in message['cmd']:
+                body = message['cmd'][self._params.rb.alert_cmd_name]
+                self._alertCommand.process(body)
             else:
                 rospy.logerr('unknown command')
         except (ValueError, TypeError) as e:
             rospy.logerr('invalid payload, %s', e)
+
+
+class AlertCommand:
+    def __init__(self, pub):
+        self._pub = pub
+
+    def process(self, body):
+        alert_name_message = String()
+        alert_name_message.data = body
+        self._pub.publish(alert_name_message)
 
 
 class NaviCommand:
@@ -154,9 +168,11 @@ def main():
     control_pub = rospy.Publisher(params.topic.control_cmd, Control, queue_size=1)
     mission_pub = rospy.Publisher(params.topic.mission_cmd, Mission, queue_size=1)
     cmdexe_pub = rospy.Publisher(params.topic.navi_cmdexe, String, queue_size=1)
+    alert_pub = rospy.Publisher(params.topic.alert, String, queue_size=1)
 
     naviCommand = NaviCommand(control_pub, mission_pub, cmdexe_pub)
-    dispatcher = Dispatcher(naviCommand)
+    alertCommand = AlertCommand(alert_pub)
+    dispatcher = Dispatcher(naviCommand, alertCommand)
     consumer = Consumer(dispatcher.dispatch_cb)
 
     def handler(signum, frame):

@@ -11,6 +11,7 @@
   <arg name="ENTITY_TYPE" default="$(optenv ENTITY_TYPE robot)"/>
   <arg name="ENTITY_ID" default="$(optenv ENTITY_ID robot01)"/>
   <arg name="NAVI_CMD_NAME" default="$(optenv NAVI_CMD_NAME naviCmd)"/>
+  <arg name="ALERT_CMD_NAME" default="$(optenv ALERT_CMD_NAME alertCmd)"/>
   <arg name="SEND_DELTA_MILLISEC" default="500"/>
   <arg name="SLOP_MILLISEC" default="1000"/>
   <arg name="MISSION_WAIT_MILLSEC" default="200"/>
@@ -27,9 +28,11 @@
     <param name="rb/entity_type" value="$(arg ENTITY_TYPE)"/>
     <param name="rb/entity_id" value="$(arg ENTITY_ID)"/>
     <param name="rb/navi_cmd_name" value="$(arg NAVI_CMD_NAME)"/>
+    <param name="rb/alert_cmd_name" value="$(arg ALERT_CMD_NAME)"/>
     <param name="topic/control_cmd" value="/command/control"/>
     <param name="topic/mission_cmd" value="/command/mission"/>
     <param name="topic/navi_cmdexe" value="/navi_cmdexe"/>
+    <param name="topic/alert" value="/alert/play"/>
     <param name="thresholds/mission_wait_ms" value="$(arg MISSION_WAIT_MILLSEC)"/>
     <param name="thresholds/waypoint_wait_ms" value="$(arg WAYPOINT_WAIT_MILLSEC)"/>
   </node>
