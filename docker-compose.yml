@@ -1,7 +1,7 @@
 version: "3"
 
 networks:
-  rosnet:
+  rosnet-alert-play:
     driver: bridge
     ipam:
      driver: default
@@ -9,12 +9,23 @@ networks:
        - subnet: 172.32.0.0/24
 
 services:
-  converter:
-    image: "alert_player:kinetic-python3"
+  alert-play:
+    image: "ryo-ma/alert_player:latest"
+    privileged: true
+    devices:
+      - '/dev/snd:/dev/snd'
+      - '/dev/bus/usb:/dev/bus/usb'
+      - '/dev/bus:/dev/bus'
+    volumes:
+      - ${XDG_RUNTIME_DIR}/pulse/native:${XDG_RUNTIME_DIR}/pulse/native
+      - ~/.config/pulse/cookie:/root/.config/pulse/cookie
     networks:
-      rosnet:
+      rosnet-alert-play:
         ipv4_address: 172.32.0.2
     tty: true
     environment:
+      - PULSE_SERVER=unix:${XDG_RUNTIME_DIR}/pulse/native
       - ROS_HOSTNAME=172.32.0.2
       - ROS_MASTER_URI=http://${ROS_MASTER_HOST}:11311
+    env_file:
+      - .env
