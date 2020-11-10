@@ -21,3 +21,9 @@ export type NGSIRobotPose = {
     },
   ];
 };
+
+export type NGSIAlertCommand = {
+  alertCmd: {
+    value: string
+  }
+}

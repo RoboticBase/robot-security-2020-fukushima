@@ -13,9 +13,12 @@ spec:
         app: geo-fence
     spec:
       containers:
-      - name: geo-fence
-        image: fukushimasecurity2020.azurecr.io/security-geo-fence:0.0.1
-        imagePullPolicy: Always
-        ports:
-          - name: geo-fence
-            containerPort: 8000
+        - name: geo-fence
+          image: fukushimasecurity2020.azurecr.io/security-geo-fence:0.0.1
+          imagePullPolicy: Always
+          env:
+            - name: ORION_ENDPOINT
+              value: "http://orion.default.svc.cluster.local:1026"
+          ports:
+            - name: geo-fence
+              containerPort: 8000
