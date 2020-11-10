@@ -43,10 +43,11 @@ export class OrionClient {
   async patchAttr<T>(
     id: string,
     attrData: T,
+    type: string,
     fiwareService: string,
     fiwareServicePath: string,
-  ) {
-    const url = `${this.endpoint}/v2/entities/${id}/attrs`;
+  ): Promise<Response> {
+    const url = `${this.endpoint}/v2/entities/${id}/attrs?type=${type}`;
     const response = await fetch(
       url,
       {
@@ -59,5 +60,6 @@ export class OrionClient {
         },
       },
     );
+    return response;
   }
 }

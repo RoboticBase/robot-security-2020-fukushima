@@ -1,19 +1,22 @@
 import {
+  DEFAULT_ALERT_DATA_NAME,
   DEFAULT_ALLOWABLE_COUNT,
   DEFAULT_ENTITY_ID,
+  DEFAULT_ENTITY_TYPE,
   DEFAULT_FIWARE_SERVICE,
   DEFAULT_FIWARE_SERVICEPATH,
   DEFAULT_LOOP_SLEEP_SECOND,
   DEFAULT_RANGE_METERS,
-  POINT_HISTORY_ID_PREFIX,
+  POINT_HISTORY_ENTITY_TYPE,
 } from "./const.ts";
 import { OrionClient } from "./orion_client.ts";
 import {
-  NGSIStuckCheckerEntity,
+  NGSIAlertCommand,
+  NGSIPointHistoryAttribute,
   NGSIPoseAttribute,
+  NGSIStuckCheckerEntity,
   Point,
   PointHistory,
-  NGSIPointHistoryAttribute,
 } from "./types.ts";
 import { log } from "../deps.ts";
 import { sleep } from "./utils.ts";
@@ -61,6 +64,13 @@ export class StuckChecker {
         fiwareServicePath,
       )
     ) {
+      await this.orionClient.patchAttr<NGSIAlertCommand>(
+        entityId,
+        { alertCmd: { value: DEFAULT_ALERT_DATA_NAME } },
+        DEFAULT_ENTITY_TYPE,
+        fiwareService,
+        fiwareServicePath,
+      );
       logger.error(
         { "message": `Error, "${entityId}" stuck`, point: currentPoint },
       );
@@ -81,7 +91,7 @@ export class StuckChecker {
     fiwareServicePath: string,
   ) {
     const entity = await this.orionClient.getEntity<NGSIStuckCheckerEntity>(
-      `${POINT_HISTORY_ID_PREFIX}_${entityId}`,
+      `${POINT_HISTORY_ENTITY_TYPE}_${entityId}`,
       fiwareService,
       fiwareServicePath,
     );
@@ -90,7 +100,7 @@ export class StuckChecker {
       currentPoint,
     );
     await this.orionClient.patchAttr<NGSIPointHistoryAttribute>(
-      `${POINT_HISTORY_ID_PREFIX}_${entityId}`,
+      `${POINT_HISTORY_ENTITY_TYPE}_${entityId}`,
       {
         pointHistory: {
           type: "object",
@@ -98,6 +108,7 @@ export class StuckChecker {
           metadata: {},
         },
       },
+      POINT_HISTORY_ENTITY_TYPE,
       fiwareService,
       fiwareServicePath,
     );
@@ -130,7 +141,7 @@ export class StuckChecker {
     fiwareServicePath: string,
   ): Promise<boolean> {
     const entity = await this.orionClient.getEntity<NGSIStuckCheckerEntity>(
-      `${POINT_HISTORY_ID_PREFIX}_${entityId}`,
+      `${POINT_HISTORY_ENTITY_TYPE}_${entityId}`,
       fiwareService,
       fiwareServicePath,
     );

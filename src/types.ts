@@ -38,3 +38,9 @@ export type NGSIPoseAttribute = {
   };
   metadata: {};
 };
+
+export type NGSIAlertCommand = {
+  alertCmd: {
+    value: string
+  }
+}
