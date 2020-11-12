@@ -12,6 +12,7 @@ import {
 import { OrionClient } from "./orion_client.ts";
 import {
   NGSIAlertCommand,
+  NGSIModeAttribute,
   NGSIPointHistoryAttribute,
   NGSIPoseAttribute,
   NGSIStuckCheckerEntity,
@@ -46,6 +47,16 @@ export class StuckChecker {
     fiwareService: string,
     fiwareServicePath: string,
   ) {
+    const mode = await this.orionClient.getAttrs<NGSIModeAttribute>(
+      entityId,
+      "mode",
+      fiwareService,
+      fiwareServicePath,
+    );
+    logger.info(`mode=${mode.value}`);
+    if (mode.value !== "navi") {
+      return;
+    }
     const poseAttr = await this.orionClient.getAttrs<NGSIPoseAttribute>(
       entityId,
       "pose",

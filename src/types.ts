@@ -22,7 +22,7 @@ export type NGSIPointHistoryAttribute = {
     value: { history: PointHistory };
     metadata: {};
   };
-}
+};
 
 export type NGSIPoseAttribute = {
   type: string;
@@ -39,8 +39,14 @@ export type NGSIPoseAttribute = {
   metadata: {};
 };
 
+export type NGSIModeAttribute = {
+  type: string;
+  value: string;
+  metadata: {};
+};
+
 export type NGSIAlertCommand = {
   alertCmd: {
-    value: string
-  }
-}
+    value: string;
+  };
+};
