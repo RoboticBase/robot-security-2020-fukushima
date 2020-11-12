@@ -4,46 +4,61 @@
         "cmdexe": {
             "type": "object",
             "properties": {
-                "time": {
-                    "type": "string",
-                    "format": "date-time"
-                },
-                "received_time": {
-                    "type": "string",
-                    "format": "date-time"
-                },
-                "received_command": {
-                    "type": "string"
-                },
-                "received_waypoints": {
-                    "type": "array",
-                    "items": {
-                        "type": "object",
-                        "properties": {
-                            "point": {
+                "naviCmd": {
+                    "type": "object",
+                    "properties": {
+                        "time": {
+                            "type": "string",
+                            "format": "date-time"
+                        },
+                        "received_time": {
+                            "type": "string",
+                            "format": "date-time"
+                        },
+                        "received_command": {
+                            "type": "string"
+                        },
+                        "received_waypoints": {
+                            "type": "array",
+                            "items": {
                                 "type": "object",
                                 "properties": {
-                                    "latitude": {
-                                        "type": "number"
+                                    "point": {
+                                        "type": "object",
+                                        "properties": {
+                                            "latitude": {
+                                                "type": "number"
+                                            },
+                                            "longitude": {
+                                                "type": "number"
+                                            },
+                                            "altitude": {
+                                                "type": "number"
+                                            }
+                                        },
+                                        "additionalProperties": false,
+                                        "required": [
+                                            "latitude",
+                                            "longitude",
+                                            "altitude"
+                                        ]
                                     },
-                                    "longitude": {
-                                        "type": "number"
+                                    "angle": {
+                                        "type": "object",
+                                        "properties": {
+                                            "theta": {
+                                                "type": [
+                                                    "number",
+                                                    "null"
+                                                ]
+                                            }
+                                        },
+                                        "additionalProperties": false,
+                                        "required": [
+                                            "theta"
+                                        ]
                                     },
-                                    "altitude": {
-                                        "type": "number"
-                                    }
-                                },
-                                "additionalProperties": false,
-                                "required": [
-                                    "latitude",
-                                    "longitude",
-                                    "altitude"
-                                ]
-                            },
-                            "angle": {
-                                "type": "object",
-                                "properties": {
-                                    "theta": {
+                                    "speed": {
                                         "type": [
                                             "number",
                                             "null"
@@ -52,32 +67,31 @@
                                 },
                                 "additionalProperties": false,
                                 "required": [
-                                    "theta"
-                                ]
-                            },
-                            "speed": {
-                                "type": [
-                                    "number",
-                                    "null"
+                                    "point",
+                                    "angle"
                                 ]
                             }
                         },
-                        "additionalProperties": false,
-                        "required": [
-                            "point",
-                            "angle"
-                        ]
-                    }
-                },
-                "result": {
-                    "type": "string",
-                    "enum": [
-                        "ack",
-                        "error"
+                        "result": {
+                            "type": "string",
+                            "enum": [
+                                "ack",
+                                "error"
+                            ]
+                        },
+                        "errors": {
+                            "type": "array"
+                        }
+                    },
+                    "additionalProperties": false,
+                    "required": [
+                        "time",
+                        "received_time",
+                        "received_command",
+                        "received_waypoints",
+                        "result",
+                        "errors"
                     ]
-                },
-                "errors": {
-                    "type": "array"
                 },
                 "metadata": {
                     "type": "object",
@@ -85,7 +99,8 @@
                         "digest": {
                             "type": "string",
                             "enum": [
-                                ""
+                                "",
+                                "bd85cad3e057cd676fd44c2a77a2cb7c34d42a6a34910f93e9c89e4e406fe7b8"
                             ]
                         }
                     },
@@ -97,12 +112,7 @@
             },
             "additionalProperties": false,
             "required": [
-                "time",
-                "received_time",
-                "received_command",
-                "received_waypoints",
-                "result",
-                "errors",
+                "naviCmd",
                 "metadata"
             ]
         }

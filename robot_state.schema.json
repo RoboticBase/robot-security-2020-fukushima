@@ -103,7 +103,8 @@
                         "digest": {
                             "type": "string",
                             "enum": [
-                                ""
+                                "",
+                                "bd85cad3e057cd676fd44c2a77a2cb7c34d42a6a34910f93e9c89e4e406fe7b8"
                             ]
                         }
                     },
