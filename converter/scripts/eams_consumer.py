@@ -41,13 +41,15 @@ class Dispatcher:
 
 
 class AlertCommand:
-    def __init__(self, pub):
-        self._pub = pub
+    def __init__(self, alert_pub, cmdexe_pub):
+        self._alert_pub = alert_pub
+        self._cmdexe_pub = cmdexe_pub
 
     def process(self, body):
         alert_name_message = String()
         alert_name_message.data = body
-        self._pub.publish(alert_name_message)
+        self._alert_pub.publish(alert_name_message)
+        self._cmdexe_pub.publish(alert_name_message)
 
 
 class NaviCommand:
@@ -171,7 +173,7 @@ def main():
     alert_pub = rospy.Publisher(params.topic.alert, String, queue_size=1)
 
     naviCommand = NaviCommand(control_pub, mission_pub, cmdexe_pub)
-    alertCommand = AlertCommand(alert_pub)
+    alertCommand = AlertCommand(alert_pub, cmdexe_pub)
     dispatcher = Dispatcher(naviCommand, alertCommand)
     consumer = Consumer(dispatcher.dispatch_cb)
 
