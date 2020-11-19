@@ -49,7 +49,11 @@ class AlertCommand:
         alert_name_message = String()
         alert_name_message.data = body
         self._alert_pub.publish(alert_name_message)
-        self._cmdexe_pub.publish(alert_name_message)
+
+        alert_result = String()
+        result = {'alert_name': body}
+        alert_result.data = json.dumps(result)
+        self._cmdexe_pub.publish(alert_result)
 
 
 class NaviCommand:
