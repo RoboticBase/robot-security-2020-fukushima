@@ -137,7 +137,7 @@ class AlertResult(Base):
 
     def alert_result_cb(self, result):
         rospy.loginfo('subscribe a alert result, %s', result)
-        self.send_cmdexe(message.data)
+        self.send_cmdexe(result.data)
 
 
 def main():
