@@ -169,11 +169,12 @@ def main():
 
     control_pub = rospy.Publisher(params.topic.control_cmd, Control, queue_size=1)
     mission_pub = rospy.Publisher(params.topic.mission_cmd, Mission, queue_size=1)
-    cmdexe_pub = rospy.Publisher(params.topic.navi_cmdexe, String, queue_size=1)
+    navi_cmdexe_pub = rospy.Publisher(params.topic.navi_cmdexe, String, queue_size=1)
+    alert_cmdexe_pub = rospy.Publisher(params.topic.alert_cmdexe, String, queue_size=1)
     alert_pub = rospy.Publisher(params.topic.alert, String, queue_size=1)
 
-    naviCommand = NaviCommand(control_pub, mission_pub, cmdexe_pub)
-    alertCommand = AlertCommand(alert_pub, cmdexe_pub)
+    naviCommand = NaviCommand(control_pub, mission_pub, navi_cmdexe_pub)
+    alertCommand = AlertCommand(alert_pub, alert_cmdexe_pub)
     dispatcher = Dispatcher(naviCommand, alertCommand)
     consumer = Consumer(dispatcher.dispatch_cb)
 

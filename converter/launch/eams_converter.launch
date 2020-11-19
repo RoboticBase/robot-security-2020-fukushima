@@ -32,6 +32,7 @@
     <param name="topic/control_cmd" value="/command/control"/>
     <param name="topic/mission_cmd" value="/command/mission"/>
     <param name="topic/navi_cmdexe" value="/navi_cmdexe"/>
+    <param name="topic/alert_cmdexe" value="/alert_cmdexe"/>
     <param name="topic/alert" value="/alert/play"/>
     <param name="thresholds/mission_wait_ms" value="$(arg MISSION_WAIT_MILLSEC)"/>
     <param name="thresholds/waypoint_wait_ms" value="$(arg WAYPOINT_WAIT_MILLSEC)"/>
@@ -54,6 +55,7 @@
     <param name="topic/battery" value="/mavros/battery"/>
     <param name="topic/image_info" value="/camera/image_info"/>
     <param name="topic/navi_cmdexe" value="/navi_cmdexe"/>
+    <param name="topic/alert_cmdexe" value="/alert_cmdexe"/>
     <param name="thresholds/send_delta_ms" value="$(arg SEND_DELTA_MILLISEC)"/>
     <param name="thresholds/slop_ms" value="$(arg SLOP_MILLISEC)"/>
   </node>

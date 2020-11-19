@@ -131,6 +131,15 @@ class NaviResult(Base):
         self.send_cmdexe(message)
 
 
+class AlertResult(Base):
+    def __init__(self, producer):
+        super().__init__(producer)
+
+    def alert_result_cb(self, result):
+        rospy.loginfo('subscribe a alert result, %s', result)
+        self.send_cmdexe(message.data)
+
+
 def main():
     rospy.init_node('eams_producer', anonymous=True, disable_signals=True)
     params = wrap_namespace(rospy.get_param('~'))
@@ -153,6 +162,9 @@ def main():
 
     navi_result = NaviResult(producer)
     rospy.Subscriber(params.topic.navi_cmdexe, String, navi_result.navi_result_cb)
+
+    alert_result = AlertResult(producer)
+    rospy.Subscriber(params.topic.alert_cmdexe, String, alert_result.alert_result_cb)
 
     def handler(signum, frame):
         rospy.loginfo('shutting down...')
