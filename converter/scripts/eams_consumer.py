@@ -42,6 +42,7 @@ class Dispatcher:
 
 class AlertCommand:
     def __init__(self, alert_pub, cmdexe_pub):
+        self._params = wrap_namespace(rospy.get_param('~'))
         self._alert_pub = alert_pub
         self._cmdexe_pub = cmdexe_pub
 
