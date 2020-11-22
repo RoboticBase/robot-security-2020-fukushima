@@ -1,16 +1,15 @@
 #!/bin/bash
 
 . ./.env
+. ./../../kong/k8s/.env
+. ./../../order-ui/k8s/.env
 
 SERVICE_NAME="static-planner-service"
 BACKEND_URL="http://static-route-planner:3000"
 ROUTE_NAME="static-planner-route"
-CONSUMER_NAME="static-planner-consumer"
 
 # delete existing objedcts
 echo "# delete existing objects"
-consumerId=$(curl -s "http://kong-gateway:8001/consumers/" | jq -r ".data[] | select(.username == \"${CONSUMER_NAME}\") | .id")
-curl -s "http://kong-gateway:8001/consumers/${consumerId}" -X DELETE
 pluginIds=($(curl -s "http://kong-gateway:8001/routes/${ROUTE_NAME}/plugins" | jq -r ".data[].id"))
 for id in ${pluginIds[@]}; do
   curl -s "http://kong-gateway:8001/routes/${ROUTE_NAME}/plugins/${id}" -X DELETE
@@ -31,24 +30,20 @@ echo ""
 echo "# create route: ${ROUTE_NAME}"
 curl -i "http://kong-gateway:8001/services/${SERVICE_NAME}/routes" -X POST \
      --data "name=${ROUTE_NAME}" \
-     --data "hosts[]=${ROUTING_HOST}" \
+     --data "hosts[]=${STATIC_PLANNER_DOMAIN}" \
      --data "protocols[]=https"
 echo ""
 
-# set key-auth
-echo "# set key-auth"
+# set plugins
+echo "# set plugins"
 curl -i "http://kong-gateway:8001/routes/${ROUTE_NAME}/plugins" -X POST \
      --data "name=key-auth" \
      --data "config.key_names[]=authorization" \
      --data "config.hide_credentials=true"
 curl -i "http://kong-gateway:8001/routes/${ROUTE_NAME}/plugins" -X POST \
      --data "name=acl" \
-     --data "config.whitelist[]=${ROUTE_NAME}"
-curl -i "http://kong-gateway:8001/consumers" -X POST \
-     --data "username=${CONSUMER_NAME}" \
-     --data "custom_id=${CONSUMER_NAME}"
-curl -i "http://kong-gateway:8001/consumers/${CONSUMER_NAME}/key-auth" -X POST \
-     --data "key=${CONSUMER_KEY}"
-curl -i "http://kong-gateway:8001/consumers/${CONSUMER_NAME}/acls" -X POST \
-     --data "group=${ROUTE_NAME}"
+     --data "config.whitelist[]=${KEY_CONSUMER}"
+curl -i "http://kong-gateway:8001/routes/${ROUTE_NAME}/plugins" -X POST \
+     --data "name=cors" \
+     --data "config.origins=https://${GUI_DOMAIN}"
 
