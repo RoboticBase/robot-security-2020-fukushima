@@ -2,7 +2,7 @@
 # 起動
 
 ```
-sudo python3 security_box.py
+./run.sh
 ```
 
 

@@ -1,3 +1,4 @@
+import os
 import binascii
 import nfc
 import pygame.mixer
@@ -14,12 +15,15 @@ class SecurityBox:
     def __init__(self, id_list):
         self.id_list = id_list
         self.clf = nfc.ContactlessFrontend('usb')
+        pygame.mixer.init()
+        pygame.mixer.music.load(VOICE_FILE_PATH)
+        GPIO.setmode(GPIO.BCM)
+        GPIO.setup(PORT, GPIO.OUT)
 
     def on_connect(self, tag):
         self.idm = binascii.hexlify(tag._nfcid)
         if self.idm.decode() in self.id_list:
             self.open()
-
         return True
 
     def open(self):
@@ -37,20 +41,21 @@ class SecurityBox:
 
 def main():
     id_list = []
-    with open(ID_LIST_PATH, 'r') as f:
-        id_list = [id.strip() for id in f.readlines()]
+    card_id = os.environ.get('CARD_ID')
+    if card_id is None:
+        with open(ID_LIST_PATH, 'r') as f:
+            id_list = [id.strip() for id in f.readlines()]
+    else:
+        id_list.append(card_id)
+
     security_box = SecurityBox(id_list)
-    pygame.mixer.init()
-    pygame.mixer.music.load(VOICE_FILE_PATH)
-    GPIO.setmode(GPIO.BCM)
-    GPIO.setup(PORT, GPIO.OUT)
     while True:
         try:
             security_box.read_id()
             time.sleep(1)
         except KeyboardInterrupt:
-            GPIO.cleanup()
             security_box.close()
+            GPIO.cleanup()
             break
 
 
