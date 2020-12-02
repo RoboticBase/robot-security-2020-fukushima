@@ -13,6 +13,7 @@ ID_LIST_PATH = 'data/id_list.csv'
 class SecurityBox:
     def __init__(self, id_list):
         self.id_list = id_list
+        self.clf = nfc.ContactlessFrontend('usb')
 
     def on_connect(self, tag):
         self.idm = binascii.hexlify(tag._nfcid)
@@ -28,11 +29,10 @@ class SecurityBox:
         pygame.mixer.music.play()
 
     def read_id(self):
-        clf = nfc.ContactlessFrontend('usb')
-        try:
-            clf.connect(rdwr={'on-connect': self.on_connect})
-        finally:
-            clf.close()
+        self.clf.connect(rdwr={'on-connect': self.on_connect})
+
+    def close(self):
+        self.clf.close()
 
 
 def main():
@@ -47,8 +47,10 @@ def main():
     while True:
         try:
             security_box.read_id()
+            time.sleep(1)
         except KeyboardInterrupt:
             GPIO.cleanup()
+            security_box.close()
             break
 
 
