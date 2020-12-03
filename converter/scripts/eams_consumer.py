@@ -107,6 +107,9 @@ class NaviCommand:
         elif cmd == 'suspend':
             control.command = 2
             return control, None, result
+        elif cmd == 'resume':
+            control.command = 3
+            return control, None, result
         else:
             rospy.logerr('invalid command {}'.format(body['command']))
             return None, None, None
