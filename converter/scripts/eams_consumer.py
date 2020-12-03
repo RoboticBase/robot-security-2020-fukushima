@@ -121,6 +121,7 @@ class NaviCommand:
 
         details = []
         for wp in body.get('waypoints', []):
+            # Create a waypoint message.
             waypoint = Detail()
             waypoint.command = 1
             waypoint.lat = wp['point']['latitude']
@@ -130,6 +131,7 @@ class NaviCommand:
             waypoint.param3 = 0.0
             waypoint.param4 = 0.0
             details.append(waypoint)
+            # Create an angle message.
             if 'theta' in wp['angle'] and wp['angle']['theta'] is not None:
                 theta = Detail()
                 theta.command = 3
@@ -140,16 +142,24 @@ class NaviCommand:
                 theta.param3 = 0.0
                 theta.param4 = 0.0
                 details.append(theta)
-            if 'metadata' in wp and 'map' in wp['metadata'] and wp['metadata']['map'] in [4, 5]:
+            # Create a map message.
+            if 'metadata' in wp and 'map' in wp['metadata'] and wp['metadata']['map'] in ('GPS', 'Cartgrapher'):
                 mp = Detail()
-                mp.command = wp['metadata']['map']
                 mp.lat = 0.0
                 mp.lng = 0.0
                 mp.param1 = 0.0
                 mp.param2 = 0.0
                 mp.param3 = 0.0
                 mp.param4 = 0.0
-                details.append(mp)
+                if wp['metadata']['map'] == 'GPS':
+                    mp.command = 4
+                    details.append(mp)
+                elif wp['metadata']['map'] == 'Cartgrapher':
+                    mp.command = 5
+                    details.append(mp)
+                else:
+                    rospy.logerr('invalid map command {}'.format(wp['metadata']['map']))
+            # Create a delay message.
             delay = Detail()
             delay.command = 2
             delay.lat = 0.0
