@@ -86,7 +86,7 @@ class NaviCommand:
         return control, mission
 
     def _make_control_and_mission(self, body):
-        if 'command' not in body or body['command'] not in ('start', 'stop', 'suspend'):
+        if 'command' not in body or body['command'] not in ('start', 'stop', 'suspend', 'resume'):
             return None, None, None
 
         result = self._make_result(body)
