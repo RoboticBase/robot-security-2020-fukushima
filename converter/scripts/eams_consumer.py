@@ -154,7 +154,7 @@ class NaviCommand:
                 if wp['metadata']['map'] == 'GPS':
                     mp.command = 4
                     details.append(mp)
-                elif wp['metadata']['map'] == 'Cartgrapher':
+                elif wp['metadata']['map'] == 'Cartographer':
                     mp.command = 5
                     details.append(mp)
                 else:
