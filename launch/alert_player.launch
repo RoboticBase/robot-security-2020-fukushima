@@ -5,6 +5,6 @@
     <param name="sleep_time" value="1" />
     <param name="volume" value="1.0" />
     <param name="topic/alert_play" value="/alert/play" />
-    <param name="alert_base_path" value="/opt/ros_ws/src/alert_player/alert_data/" />
+    <param name="alert_base_path" value="$(find alert_player)/alert_data/" />
   </node>
 </launch>
