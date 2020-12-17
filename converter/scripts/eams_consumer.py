@@ -143,7 +143,7 @@ class NaviCommand:
                 theta.param4 = 0.0
                 details.append(theta)
             # Create a map message.
-            if 'metadata' in wp and 'map' in wp['metadata'] and wp['metadata']['map'] in ('GPS', 'Cartgrapher'):
+            if 'metadata' in wp and 'map' in wp['metadata'] and wp['metadata']['map'] in ('GPS', 'Cartographer'):
                 mp = Detail()
                 mp.lat = 0.0
                 mp.lng = 0.0
