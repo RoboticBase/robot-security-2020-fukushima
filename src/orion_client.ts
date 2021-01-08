@@ -11,11 +11,26 @@ export class OrionClient {
     fiwareServicePath: string,
   ) {
     const url = `${this.endpoint}/v2/entities/${id}/attrs?type=${type}`;
+    return await this.request(
+      url,
+      "PATCH",
+      JSON.stringify(attrData),
+      fiwareService,
+      fiwareServicePath,
+    );
+  }
+  async request(
+    url: string,
+    method: string,
+    body: string,
+    fiwareService: string,
+    fiwareServicePath: string,
+  ) {
     const response = await fetch(
       url,
       {
-        method: "PATCH",
-        body: JSON.stringify(attrData),
+        method: method,
+        body: body,
         headers: {
           "Content-type": "application/json; charset=UTF-8",
           "fiware-service": fiwareService,

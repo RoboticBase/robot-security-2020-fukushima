@@ -16,7 +16,7 @@ export type NGSIRobotPose = {
           angle: { theta: number };
           point: { latitude: number; longitude: number; altitude: number };
         };
-        metadata: {};
+        metadata: Record<string, unknown>;
       };
     },
   ];
@@ -24,6 +24,6 @@ export type NGSIRobotPose = {
 
 export type NGSIAlertCommand = {
   alertCmd: {
-    value: string
-  }
-}
+    value: string;
+  };
+};
