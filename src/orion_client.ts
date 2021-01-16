@@ -9,14 +9,10 @@ export class OrionClient {
     fiwareServicePath: string,
   ): Promise<T> {
     const url = `${this.endpoint}/v2/entities/${id}`;
-    const response = await fetch(
+    const response = await this.getRequest(
       url,
-      {
-        headers: {
-          "fiware-service": fiwareService,
-          "fiware-servicepath": fiwareServicePath,
-        },
-      },
+      fiwareService,
+      fiwareServicePath,
     );
     return await response.json();
   }
@@ -28,14 +24,10 @@ export class OrionClient {
     fiwareServicePath: string,
   ): Promise<T> {
     const url = `${this.endpoint}/v2/entities/${id}/attrs/${attrs}`;
-    const response = await fetch(
+    const response = await this.getRequest(
       url,
-      {
-        headers: {
-          "fiware-service": fiwareService,
-          "fiware-servicepath": fiwareServicePath,
-        },
-      },
+      fiwareService,
+      fiwareServicePath,
     );
     return await response.json();
   }
@@ -48,11 +40,42 @@ export class OrionClient {
     fiwareServicePath: string,
   ): Promise<Response> {
     const url = `${this.endpoint}/v2/entities/${id}/attrs?type=${type}`;
+    const response = await this.patchRequest(
+      url,
+      JSON.stringify(attrData),
+      fiwareService,
+      fiwareServicePath,
+    );
+    return response;
+  }
+  async getRequest(
+    url: string,
+    fiwareService: string,
+    fiwareServicePath: string,
+  ) {
+    const response = await fetch(
+      url,
+      {
+        headers: {
+          "Content-type": "application/json; charset=UTF-8",
+          "fiware-service": fiwareService,
+          "fiware-servicepath": fiwareServicePath,
+        },
+      },
+    );
+    return response;
+  }
+  async patchRequest(
+    url: string,
+    body: string,
+    fiwareService: string,
+    fiwareServicePath: string,
+  ) {
     const response = await fetch(
       url,
       {
         method: "PATCH",
-        body: JSON.stringify(attrData),
+        body: body,
         headers: {
           "Content-type": "application/json; charset=UTF-8",
           "fiware-service": fiwareService,
