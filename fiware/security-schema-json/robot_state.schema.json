@@ -1,0 +1,131 @@
+{
+    "type": "object",
+    "properties": {
+        "attrs": {
+            "type": "object",
+            "properties": {
+                "time": {
+                    "type": "string",
+                    "format": "date-time"
+                },
+                "mode": {
+                    "type": "string",
+                    "enum": [
+                        "init",
+                        "navi",
+                        "standby",
+                        "suspend",
+                        "error"
+                    ]
+                },
+                "pose": {
+                    "type": "object",
+                    "properties": {
+                        "point": {
+                            "type": "object",
+                            "properties": {
+                                "latitude": {
+                                    "type": "number"
+                                },
+                                "longitude": {
+                                    "type": "number"
+                                },
+                                "altitude": {
+                                    "type": "number"
+                                }
+                            },
+                            "additionalProperties": false,
+                            "required": [
+                                "latitude",
+                                "longitude",
+                                "altitude"
+                            ]
+                        },
+                        "angle": {
+                            "type": "object",
+                            "properties": {
+                                "theta": {
+                                    "type": "number"
+                                }
+                            },
+                            "additionalProperties": false,
+                            "required": [
+                                "theta"
+                            ]
+                        }
+                    },
+                    "additionalProperties": false,
+                    "required": [
+                        "point",
+                        "angle"
+                    ]
+                },
+                "accuracy": {
+                    "type": "object",
+                    "properties": {
+                        "covariance": {
+                            "type": "array",
+                            "items": {
+                                "type": "number"
+                            }
+                        }
+                    },
+                    "additionalProperties": false,
+                    "required": [
+                        "covariance"
+                    ]
+                },
+                "battery": {
+                    "type": "object",
+                    "properties": {
+                        "voltage": {
+                            "type": "number"
+                        },
+                        "current": {
+                            "type": "number"
+                        }
+                    },
+                    "additionalproperties": false,
+                    "required": [
+                        "voltage",
+                        "current"
+                    ]
+                },
+                "destination": {
+                    "type": "object"
+                },
+                "errors": {
+                    "type": "array"
+                },
+                "metadata": {
+                    "type": "object",
+                    "properties": {
+                        "digest": {
+                            "type": "string",
+                            "enum": [
+                                "3e5aaa057d247c9d63ff860721578877c27861e1bbcc6089541d7ce0e155c106"
+                            ]
+                        }
+                    },
+                    "required": [
+                        "digest"
+                    ]
+                }
+            },
+            "additionalProperties": false,
+            "required": [
+                "time",
+                "mode",
+                "pose",
+                "accuracy",
+                "battery",
+                "destination",
+                "metadata"
+            ]
+        }
+    },
+    "additionalProperties": false,
+    "required": [
+        "attrs"
+    ]
+}
