@@ -10,7 +10,7 @@ services:
       - rosnet
     command: "roscore"
   converter:
-    image: "ros:kinetic-python3"
+    image: "nmatsui/ros-kinetic-python3:0.0.1"
     networks:
       - rosnet
     tty: true
