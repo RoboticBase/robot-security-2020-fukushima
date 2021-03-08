@@ -20,7 +20,6 @@ RUN apt update && apt upgrade -y && \
     /root/.pyenv/bin/pyenv global 3.8.6
 
 COPY ./converter /opt/rosws/src/converter
-COPY ./uoa_poc3_msgs /opt/rosws/src/uoa_poc3_msgs
 COPY ./eams_msgs /opt/rosws/src/eams_msgs
 COPY ./docker/production/client.sh /opt/client.sh
 
