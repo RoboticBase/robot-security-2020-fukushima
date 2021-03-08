@@ -1,0 +1,51 @@
+{
+    "type": "object",
+    "properties": {
+        "cmdexe": {
+            "type": "object",
+            "properties": {
+                "alertCmd": {
+                    "type": "object",
+                    "properties": {
+                        "time": {
+                            "type": "string",
+                            "format": "date-time"
+                        },
+                        "received_alert": {
+                            "type": "string"
+                        }
+                    },
+                    "additionalProperties": false,
+                    "required": [
+                        "time",
+                        "received_alert"
+                    ]
+                },
+                "metadata": {
+                    "type": "object",
+                    "properties": {
+                        "digest": {
+                            "type": "string",
+                            "enum": [
+                                "3e5aaa057d247c9d63ff860721578877c27861e1bbcc6089541d7ce0e155c106"
+                            ]
+                        }
+                    },
+                    "additionalProperties": false,
+                    "required": [
+                        "digest"
+                    ]
+                }
+            },
+            "additionalProperties": false,
+            "required": [
+                "alertCmd",
+                "metadata"
+            ]
+        }
+    },
+    "additionalProperties": false,
+    "required": [
+        "cmdexe"
+    ]
+}
