@@ -1,0 +1,26 @@
+version: "3"
+
+networks:
+  rosnet-audit-image:
+    driver: bridge
+    ipam:
+     driver: default
+     config:
+       - subnet: 172.31.0.0/24
+
+services:
+  audit-image:
+    privileged: true
+    devices:
+      - '/dev/bus/usb/:/dev/bus/usb/'
+      - '/dev/video0:/dev/video0'
+    image: "ryo-ma/ros_audit_image:latest"
+    networks:
+      rosnet-audit-image:
+        ipv4_address: 172.31.0.2
+    tty: true
+    environment:
+      - ROS_HOSTNAME=172.31.0.2
+      - ROS_MASTER_URI=http://${ROS_MASTER_HOST}:11311
+    env_file:
+      - .env
