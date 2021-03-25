@@ -1,0 +1,71 @@
+{
+    "type": "object",
+    "properties": {
+        "attrs": {
+            "type": "object",
+            "properties": {
+                "time": {
+                    "type": "string",
+                    "format": "date-time"
+                },
+                "image": {
+                    "type": "object",
+                    "properties": {
+                        "time": {
+                            "type": "string"
+                        },
+                        "latitude": {
+                            "type": "string"
+                        },
+                        "longitude": {
+                            "type": "string"
+                        },
+                        "theta": {
+                            "type": "string"
+                        },
+                        "hash": {
+                            "type": "string"
+                        },
+                        "path": {
+                            "type": "string"
+                        }
+                    },
+                    "additionalProperties": false,
+                    "required": [
+                        "time",
+                        "latitude",
+                        "longitude",
+                        "theta",
+                        "hash",
+                        "path"
+                    ]
+                },
+                "metadata": {
+                    "type": "object",
+                    "properties": {
+                        "digest": {
+                            "type": "string",
+                            "enum": [
+                                "3e5aaa057d247c9d63ff860721578877c27861e1bbcc6089541d7ce0e155c106"
+                            ]
+                        }
+                    },
+                    "additionalProperties": false,
+                    "required": [
+                        "digest"
+                    ]
+                }
+            },
+            "additionalProperties": false,
+            "required": [
+                "time",
+                "image",
+                "metadata"
+            ]
+        }
+    },
+    "additionalProperties": false,
+    "required": [
+        "attrs"
+    ]
+}

@@ -1,0 +1,21 @@
+apiVersion: apps/v1
+kind: Deployment
+metadata:
+  name: stuck-checker
+spec:
+  replicas: 1
+  selector:
+    matchLabels:
+      app: stuck-checker
+  template:
+    metadata:
+      labels:
+        app: stuck-checker
+    spec:
+      containers:
+      - name: stuck-checker
+        image: fukushimasecurity2020.azurecr.io/security-stuck-checker:0.0.1
+        imagePullPolicy: Always
+        env:
+        - name: ORION_ENDPOINT
+          value: "http://orion.default.svc.cluster.local:1026"

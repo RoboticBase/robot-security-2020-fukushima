@@ -1,0 +1,8 @@
+<launch>
+  <node name="send_position" pkg="test_client" type="send_position.py" output="screen">
+  </node>
+  <node name="send_compass" pkg="test_client" type="send_compass.py" output="screen">
+  </node>
+  <node name="send_battery" pkg="test_client" type="send_battery.py" output="screen">
+  </node>
+</launch>
